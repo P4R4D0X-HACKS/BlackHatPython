@@ -7,17 +7,19 @@ target_port = 80
 # Creating a client socket
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-# Connect to client
-client.connect((target_host, target_port))
+try:
+    # Connect to client
+    client.connect((target_host, target_port))
+    # Sending some data
+    client.send(b"GET / HTTP/1.1\r\nHost: google.com\r\n\r\n")
+    # Receive some data
+    response = client.recv(4096)
+    # printing the response by decoding it
+    print(response.decode())
 
-# Sending some data
-client.send(b"GET / HTTP/1.1\r\nHost: google.com\r\n\r\n")
+except Exception as e:
+    print(f"An error occurred: {e}")
 
-# Receive some data
-response = client.recv(4096)
-
-# printing the response by decoding it
-print(response.decode())
-
-# Closing the connection
-client.close()
+finally:
+    # Closing the connection
+    client.close()
